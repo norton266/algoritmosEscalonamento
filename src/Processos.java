@@ -2,13 +2,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Processos {
-    int processo;
-    int tempoChegada;
-    int tempoExecucao;
-    int tempoRestante;
-    int prioridade;
+    private int processo;
+    private int tempoChegada;
+    private int tempoExecucao;
+    private int tempoRestante;
+    private int prioridade;
     public static ArrayList<Processos> arrayProcessos = new ArrayList();
 
+    //construtor para os objetos criados manualmente
     public Processos(int processo, int tempoChegada, int tempoExecucao, int tempoRestante, int prioridade){
         this.processo = processo;
         this.tempoChegada = tempoChegada;
@@ -19,12 +20,14 @@ public class Processos {
         arrayProcessos.add(this);
     }
 
+
+    //construtor para os objetos criados de forma aleatória
     public Processos(int processo){
         Random rand = new Random();
         this.processo = processo;
         this.tempoChegada = rand.nextInt(10) + 1;
         this.tempoExecucao = rand.nextInt(10) + 1;
-        this.tempoRestante = rand.nextInt(10) + 1;
+        this.tempoRestante = tempoExecucao;
         this.prioridade = rand.nextInt(10) + 1;
 
         arrayProcessos.add(this);
@@ -34,6 +37,8 @@ public class Processos {
 
     }
 
+
+    //método que popula o array de processos da classe Escalonamentos
     public ArrayList<Processos> escalonamento(){
 
         ArrayList<Processos> processo = new ArrayList<>();
@@ -42,7 +47,7 @@ public class Processos {
             Processos p = new Processos();
             p.setProcesso(arrayProcessos.get(i).getProcesso());
             p.setPrioridade(arrayProcessos.get(i).getPrioridade());
-            p.setTempoChegada(arrayProcessos.get(i).getPrioridade());
+            p.setTempoChegada(arrayProcessos.get(i).getTempoChegada());
             p.setTempoExecucao(arrayProcessos.get(i).getTempoExecucao());
             p.setTempoRestante(arrayProcessos.get(i).getTempoRestante());
 
@@ -52,10 +57,12 @@ public class Processos {
         return processo;
     }
 
+
+    //método para testes
     public void info(){
         for(int i = 0; i < arrayProcessos.size(); i++){
             System.out.println("Processo: " + arrayProcessos.get(i).getProcesso());
-            System.out.println("Tempo  chegada: " + arrayProcessos.get(i).getTempoChegada());
+            System.out.println("Tempo chegada: " + arrayProcessos.get(i).getTempoChegada());
             System.out.println("Tempo execução: " + arrayProcessos.get(i).getTempoExecucao());
             System.out.println("Tempo restante: " + arrayProcessos.get(i).getTempoRestante());
             System.out.println("Prioridade: " + arrayProcessos.get(i).getPrioridade());
@@ -64,6 +71,53 @@ public class Processos {
 
     }
 
+    //procura o processo que irá chegar primeiro ao processador
+    public Processos procuraProcessoChegada() {
+        Processos menorTempoChegada = new Processos();
+        menorTempoChegada.setTempoChegada(999);
+
+        for (int i = 0; i < arrayProcessos.size(); i++) {
+            if(arrayProcessos.get(i).getTempoChegada() < menorTempoChegada.getTempoChegada()){
+                if(arrayProcessos.get(i).getTempoRestante() > 0) {
+                    menorTempoChegada = arrayProcessos.get(i);
+                }
+            }
+        }
+        return menorTempoChegada;
+    }
+
+    public void ajustaTempoRestante(Processos processo){
+        for(int i = 0;i < arrayProcessos.size(); i++){
+            if(arrayProcessos.get(i).equals(processo)){
+                arrayProcessos.get(i).setTempoRestante(processo.getTempoRestante());
+            }
+        }
+    }
+
+    public Processos procuraProcessoExecucao(){
+        Processos menorTempoExecucao = new Processos();
+        menorTempoExecucao.setTempoExecucao(999);
+        for (int i = 0; i < arrayProcessos.size(); i++) {
+            if(arrayProcessos.get(i).getTempoExecucao() < menorTempoExecucao.getTempoExecucao()){
+                if(arrayProcessos.get(i).getTempoRestante() > 0) {
+                    menorTempoExecucao = arrayProcessos.get(i);
+                }
+            }
+        }
+
+        return menorTempoExecucao;
+    }
+
+    public boolean verificaTempoExecucao(Processos processos, int tempoExecucaoProcesso){
+        if(processos.getTempoChegada() <= tempoExecucaoProcesso){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    //getters and setters
     public int getProcesso() {
         return processo;
     }

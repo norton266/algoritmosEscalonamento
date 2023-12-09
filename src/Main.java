@@ -1,16 +1,28 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        input.useDelimiter("\n");
 
-        Processos p = new Processos(1, 2, 3, 4, 5);
-        Processos r = new Processos(2, 3, 4, 5, 6);
+        ArrayList<Integer> entradasManuais = new ArrayList<>();
+        int qtdProcessos = 0;
 
-        Processos o = new Processos(3);
-        Processos c = new Processos(4);
-        Processos e = new Processos(5);
+        System.out.println("Digite a quantidade de processos para execução:");
+        qtdProcessos = input.nextInt();
 
-        Escalonamentos s = new Escalonamentos();
+        for(int i = 0; i < qtdProcessos; i++){
+            Processos p = new Processos(i);
+        }
+
+        Escalonamentos e = new Escalonamentos();
+
+        e.SJFNaoPreemptivo();
+
+
 
 
 
