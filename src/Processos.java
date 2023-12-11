@@ -83,6 +83,7 @@ public class Processos {
                 }
             }
         }
+
         return menorTempoChegada;
     }
 
@@ -106,6 +107,27 @@ public class Processos {
         }
 
         return menorTempoExecucao;
+    }
+
+    public Processos procuraProcessoExecucaoRestante(int tempoExecucao){
+        Processos menorTempoRestante = new Processos();
+        menorTempoRestante.setTempoRestante(999);
+        for (int i = 0; i < arrayProcessos.size(); i++) {
+            if(arrayProcessos.get(i).getTempoRestante() < menorTempoRestante.getTempoRestante()){
+                if(arrayProcessos.get(i).getTempoChegada() <= tempoExecucao) {
+                    if(arrayProcessos.get(i).getTempoRestante() > 0) {
+                        menorTempoRestante = arrayProcessos.get(i);
+                    }
+                }
+            }
+        }
+        if(menorTempoRestante.getTempoRestante() == 999){
+            menorTempoRestante.setTempoRestante(0);
+            return menorTempoRestante;
+
+        } else {
+            return menorTempoRestante;
+        }
     }
 
     public boolean verificaTempoExecucao(Processos processos, int tempoExecucaoProcesso){

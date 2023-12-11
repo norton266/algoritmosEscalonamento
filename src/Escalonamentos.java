@@ -61,16 +61,18 @@ public class Escalonamentos {
         System.out.println("Tempo total de execução: " + tempoTotal);
 
 
-        //outra tentativa, criar o objeto com os atributos da classe Processos e fazer o processo desta forma
+        //cria o objeto, passa os parametros pra ele e faz a execução
         Processos primeiroProcesso = new Processos();
 
         primeiroProcesso = (primeiroProcesso.procuraProcessoChegada());
 
+        //verifica o tempo de chegada e o tempo de execução
         while(!primeiroProcesso.verificaTempoExecucao(primeiroProcesso, tempoExecucao)){
             System.out.println("Tempo[" + tempoExecucao + "] Nenhum processo alocado" );
             tempoExecucao++;
         }
 
+        //executa
         while (primeiroProcesso.getTempoRestante() > 0) {
             //remove 1 unidade de tempo restante
             primeiroProcesso.setTempoRestante(primeiroProcesso.getTempoRestante() - 1);
@@ -83,6 +85,7 @@ public class Escalonamentos {
             primeiroProcesso.ajustaTempoRestante(primeiroProcesso);
         }
 
+        //faz o mesmo processo de antes porém agora leva em consideração o processo mais curto
         for(int i = 0; i < arrayProcessosEscalonamento.size(); i++){
             Processos processoMaisCurto = new Processos();
 
@@ -103,6 +106,74 @@ public class Escalonamentos {
                 processoMaisCurto.ajustaTempoRestante(processoMaisCurto);
             }
 
+        }
+    }
+
+    public void SJFPreemptivo(){
+        int tempoTotal = 0;
+        int tempoExecucao = 1;
+
+
+        for (int i = 0; i < arrayProcessosEscalonamento.size(); i++) {
+            tempoTotal += arrayProcessosEscalonamento.get(i).getTempoExecucao();
+        }
+        System.out.println("Tempo total de execução: " + tempoTotal);
+
+
+        //cria o objeto, passa os parametros pra ele e faz a execução
+        Processos primeiroProcesso = new Processos();
+
+        primeiroProcesso = (primeiroProcesso.procuraProcessoChegada());
+
+        //verifica o tempo de chegada e o tempo de execução
+        while(!primeiroProcesso.verificaTempoExecucao(primeiroProcesso, tempoExecucao)){
+            System.out.println("Tempo[" + tempoExecucao + "] Nenhum processo alocado" );
+            tempoExecucao++;
+        }
+
+        //executa
+        while (primeiroProcesso.getTempoRestante() > 0) {
+            if(primeiroProcesso.getTempoRestante() == 999){
+                System.out.println("Tempo[" + tempoExecucao + "] Nenhum processo alocado");
+                tempoExecucao++;
+            }
+            //remove 1 unidade de tempo restante
+            primeiroProcesso.setTempoRestante(primeiroProcesso.getTempoRestante() - 1);
+
+            //imprime
+            System.out.println("Tempo[" + tempoExecucao + "]: Processo[" + primeiroProcesso.getProcesso() +
+                    "] restante " + primeiroProcesso.getTempoRestante());
+
+            tempoExecucao++;
+            primeiroProcesso.ajustaTempoRestante(primeiroProcesso);
+
+            //cria outro objeto para comparação de novos valores
+            Processos proximoProcesso = primeiroProcesso;
+
+            //procura um objeto que tenha um tempo de execução restante menor, e que seja maior que 0
+            proximoProcesso = (proximoProcesso.procuraProcessoExecucaoRestante(tempoExecucao));
+
+            //condição para verificar se ainda existem processos com tempo restante maiores que 0, caso não exista
+            //vai pro else, que é um break para sair do loop
+            if(proximoProcesso.verificaTempoExecucao(proximoProcesso, tempoExecucao) && proximoProcesso.getTempoRestante() != 0){
+                primeiroProcesso = proximoProcesso;
+
+                //remove 1 unidade de tempo restante
+                primeiroProcesso.setTempoRestante(primeiroProcesso.getTempoRestante() - 1);
+
+                //imprime
+                System.out.println("Tempo[" + tempoExecucao + "]: Processo[" + primeiroProcesso.getProcesso() +
+                        "] restante " + primeiroProcesso.getTempoRestante());
+
+                tempoExecucao++;
+                primeiroProcesso.ajustaTempoRestante(primeiroProcesso);
+
+                if(primeiroProcesso.getTempoRestante() == 0){
+                    primeiroProcesso = primeiroProcesso.procuraProcessoExecucaoRestante(tempoExecucao);
+                }
+            } else {
+                break;
+            }
         }
     }
 
