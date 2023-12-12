@@ -20,7 +20,7 @@ public class Main {
 
         Escalonamentos e = new Escalonamentos();
 
-        e.SJFPreemptivo();
+        e.PrioridadeNaoPreemptivo();
 
 
 

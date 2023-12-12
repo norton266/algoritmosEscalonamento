@@ -177,4 +177,63 @@ public class Escalonamentos {
         }
     }
 
+    public void PrioridadeNaoPreemptivo(){
+        int tempoTotal = 0;
+        int tempoExecucao = 1;
+
+
+        for (int i = 0; i < arrayProcessosEscalonamento.size(); i++) {
+            tempoTotal += arrayProcessosEscalonamento.get(i).getTempoExecucao();
+        }
+        System.out.println("Tempo total de execução: " + tempoTotal);
+
+        //cria o objeto, passa os parametros pra ele e faz a execução
+        Processos primeiroProcesso = new Processos();
+
+        primeiroProcesso = (primeiroProcesso.procuraProcessoChegada());
+
+        //verifica o tempo de chegada e o tempo de execução
+        while(!primeiroProcesso.verificaTempoExecucao(primeiroProcesso, tempoExecucao)){
+            System.out.println("Tempo[" + tempoExecucao + "] Nenhum processo alocado" );
+            tempoExecucao++;
+        }
+
+        //executa
+        while (primeiroProcesso.getTempoRestante() > 0) {
+            //remove 1 unidade de tempo restante
+            primeiroProcesso.setTempoRestante(primeiroProcesso.getTempoRestante() - 1);
+
+            //imprime
+            System.out.println("Tempo[" + tempoExecucao + "]: Processo[" + primeiroProcesso.getProcesso() +
+                    "] restante " + primeiroProcesso.getTempoRestante());
+
+            tempoExecucao++;
+            primeiroProcesso.ajustaTempoRestante(primeiroProcesso);
+        }
+
+        //faz o mesmo processo de antes porém agora leva em consideração o processo com o menor índice de prioridade
+        //(levando em consideração que quanto menor o índice maior a prioridade)
+        for(int i = 0; i < arrayProcessosEscalonamento.size(); i++){
+            Processos processoMaisPrioritario = new Processos();
+
+            processoMaisPrioritario = (processoMaisPrioritario.procuraProcessoPrioridade());
+
+            while(processoMaisPrioritario.verificaTempoExecucao(processoMaisPrioritario, tempoExecucao) == false){
+                System.out.println("Tempo[" + tempoExecucao + "] Nenhum processo alocado" );
+                tempoExecucao++;
+            }
+
+            while (processoMaisPrioritario.getTempoRestante() > 0) {
+                processoMaisPrioritario.setTempoRestante(processoMaisPrioritario.getTempoRestante() - 1);
+
+                System.out.println("Tempo[" + tempoExecucao + "]: Processo[" + processoMaisPrioritario.getProcesso() +
+                        "] restante " + processoMaisPrioritario.getTempoRestante());
+
+                tempoExecucao++;
+                processoMaisPrioritario.ajustaTempoRestante(processoMaisPrioritario);
+            }
+
+        }
+    }
+
 }

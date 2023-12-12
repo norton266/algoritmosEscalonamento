@@ -138,6 +138,20 @@ public class Processos {
         }
     }
 
+    public Processos procuraProcessoPrioridade(){
+        Processos maiorPrioridade = new Processos();
+        maiorPrioridade.setPrioridade(999);
+        for (int i = 0; i < arrayProcessos.size(); i++) {
+            if(arrayProcessos.get(i).getPrioridade() < maiorPrioridade.getPrioridade()){
+                if(arrayProcessos.get(i).getTempoRestante() > 0) {
+                    maiorPrioridade = arrayProcessos.get(i);
+                }
+            }
+        }
+
+        return maiorPrioridade;
+    }
+
 
     //getters and setters
     public int getProcesso() {
